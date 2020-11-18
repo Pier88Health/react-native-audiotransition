@@ -16,22 +16,20 @@ RCT_EXPORT_METHOD(initAudioTransition) {
   
 }
 
-(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject
-
-
 RCT_EXPORT_METHOD(audioToStart:(NSString *) absolutePath andType:(NSString *) type andResponse:(RCTResponseSenderBlock)callback) {
     NSString *originType = [absolutePath pathExtension];
     NSString *outPutPath = @"";
+    BOOL isSucceed = YES
     if ([originType isEqualToString:@"wav"] && [type isEqualToString:@"amr"]) {
-        outPutPath = [[PFAudio shareInstance] wav2Amr:absolutePath isDeleteSourchFile:YES];
+        isSucceed = [[PFAudio shareInstance] wav2Amr:absolutePath isDeleteSourchFile:YES];
     } else if ([originType isEqualToString:@"amr"] && [type isEqualToString:@"wav"]) {
-        outPutPath = [[PFAudio shareInstance] amr2Wav:absolutePath isDeleteSourchFile:YES];
+        isSucceed = [[PFAudio shareInstance] amr2Wav:absolutePath isDeleteSourchFile:YES];
     } else if ([originType isEqualToString:@"pcm"] && [type isEqualToString:@"mp3"]) {
-        outPutPath = [[PFAudio shareInstance] pcm2Mp3:absolutePath isDeleteSourchFile:YES];
+        isSucceed = [[PFAudio shareInstance] pcm2Mp3:absolutePath isDeleteSourchFile:YES];
     } else if ([originType isEqualToString:@"pcm"] && [type isEqualToString:@"wav"]) {
-        outPutPath = [[PFAudio shareInstance] pcm2Wav:absolutePath isDeleteSourchFile:YES];
+        isSucceed = [[PFAudio shareInstance] pcm2Wav:absolutePath isDeleteSourchFile:YES];
     } else if ([originType isEqualToString:@"pcm"] && [type isEqualToString:@"amr"]) {
-        outPutPath = [[PFAudio shareInstance] pcm2Amr:absolutePath isDeleteSourchFile:YES];
+        isSucceed = [[PFAudio shareInstance] pcm2Amr:absolutePath isDeleteSourchFile:YES];
     }
 //
     if (!outPutPath) {
