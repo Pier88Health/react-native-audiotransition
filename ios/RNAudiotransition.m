@@ -15,13 +15,13 @@ RCT_EXPORT_METHOD(initAudioTransition) {
   
 }
 
-RCT_EXTERN_METHOD(audioConvert:(NSString *)absolutePath
+RCT_REMAP_METHOD(audioConvert,
+                  filePath:(NSString *)absolutePath
                   andType:(NSString *)type
                   resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
-{
+                  rejecter:(RCTPromiseRejectBlock)reject) {
     NSString *originType = [absolutePath pathExtension];
-    NSString *outPutPath = [[absolutePath deletingPathExtension] stringByAppendingPathExtension:@"wav"];
+    NSString *outPutPath = [absolutePath stringByReplacingOccurrencesOfString:originType withString: type];
     BOOL isSucceed = YES;
     if ([originType isEqualToString:@"wav"] && [type isEqualToString:@"amr"]) {
         isSucceed = [[PFAudio shareInstance] wav2Amr:absolutePath isDeleteSourchFile:YES];
@@ -47,7 +47,7 @@ RCT_EXTERN_METHOD(audioConvert:(NSString *)absolutePath
 
 RCT_EXPORT_METHOD(audioToStart:(NSString *) absolutePath andType:(NSString *) type andResponse:(RCTResponseSenderBlock)callback) {
     NSString *originType = [absolutePath pathExtension];
-    NSString *outPutPath = [[absolutePath deletingPathExtension] stringByAppendingPathExtension:@"wav"];
+    NSString *outPutPath = [absolutePath stringByReplacingOccurrencesOfString:originType withString: type];
     // NSString *outPutPath = @"";
     BOOL isSucceed = YES;
     if ([originType isEqualToString:@"wav"] && [type isEqualToString:@"amr"]) {
@@ -65,9 +65,9 @@ RCT_EXPORT_METHOD(audioToStart:(NSString *) absolutePath andType:(NSString *) ty
     }
 //
     if (isSucceed) {
-        callback([@"200", outPutPath]);
+        callback(@[outPutPath]);
     } else {
-        callback([@"101", @"转换出现错误，请重试"]);
+        callback(@[[NSNull null]]);
     }
 }
 //RCT_EXPORT_METHOD(addTag:(NSString *)tag response:(RCTResponseSenderBlock)completion)
