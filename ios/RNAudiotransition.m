@@ -47,7 +47,8 @@ RCT_EXTERN_METHOD(audioConvert:(NSString *)absolutePath
 
 RCT_EXPORT_METHOD(audioToStart:(NSString *) absolutePath andType:(NSString *) type andResponse:(RCTResponseSenderBlock)callback) {
     NSString *originType = [absolutePath pathExtension];
-    NSString *outPutPath = @"";
+    NSString *outPutPath = [[absolutePath deletingPathExtension] stringByAppendingPathExtension:@"wav"];
+    // NSString *outPutPath = @"";
     BOOL isSucceed = YES;
     if ([originType isEqualToString:@"wav"] && [type isEqualToString:@"amr"]) {
         isSucceed = [[PFAudio shareInstance] wav2Amr:absolutePath isDeleteSourchFile:YES];
@@ -63,15 +64,10 @@ RCT_EXPORT_METHOD(audioToStart:(NSString *) absolutePath andType:(NSString *) ty
         isSucceed = [[PFAudio shareInstance] pcm2Wav:absolutePath isDeleteSourchFile:YES];
     }
 //
-    if (!outPutPath) {
-        callback(@[@101]);
-//        callback([@"101", @"转换出现错误，请重试"]);
-    } else if ([outPutPath isEqualToString:@""]) {
-        callback(@[@100]);
-//        callback([@"100", @"暂不支持此类型转换"]);
+    if (isSucceed) {
+        callback([@"200", outPutPath]);
     } else {
-        callback(@[@200, outPutPath]);
-        // callback([@"200", outPutPath]);
+        callback([@"101", @"转换出现错误，请重试"]);
     }
 }
 //RCT_EXPORT_METHOD(addTag:(NSString *)tag response:(RCTResponseSenderBlock)completion)
