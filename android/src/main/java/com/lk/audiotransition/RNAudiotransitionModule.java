@@ -48,6 +48,59 @@ public class RNAudiotransitionModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void audioConvert(String absolutePath,String type,final Promise promise){
+    AudioFormat audioType=AudioFormat.AAC ;
+
+    switch (type){
+      case "aac":
+        audioType = AudioFormat.AAC;
+        break;
+      case "mp3":
+          audioType = AudioFormat.MP3;
+        break;
+      case "m4a":
+          audioType = AudioFormat.M4A;
+        break;
+      case "wma":
+          audioType = AudioFormat.WMA;
+        break;
+      case "wav":
+          audioType = AudioFormat.WAV;
+        break;
+      case "falc" :
+           audioType = AudioFormat.FLAC;
+        break;
+    }
+//      String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath() +"/iat.wav";
+
+    AndroidAudioConverter.with(reactContext)
+            // Your current audio file
+            .setFile(new File(absolutePath))
+
+            // Your desired audio format
+            .setFormat(audioType)
+
+            // An callback to know when conversion is finished
+            .setCallback(new IConvertCallback() {
+              @Override
+              public void onSuccess(File convertedFile) {
+                promise.resolve(convertedFile.getAbsolutePath());
+                // callback.invoke(200,convertedFile.getAbsolutePath());
+              }
+
+              @Override
+              public void onFailure(Exception error) {
+                  Toast.makeText(reactContext,error.getMessage(),Toast.LENGTH_SHORT).show();
+                promise.reject(error.getMessage());
+                // callback.invoke(100,error.getMessage());
+              }
+            })
+
+            // Start conversion
+            .convert();
+  }
+
+  @ReactMethod
   public void audioToStart(String absolutePath,String type,final Callback callback){
     AudioFormat audioType=AudioFormat.AAC ;
 

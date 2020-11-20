@@ -61,9 +61,9 @@ RCT_EXPORT_METHOD(audioToStart:(NSString *) absolutePath andType:(NSString *) ty
     } 
 //
     if (isSucceed) {
-        callback(@[outPutPath]);
+        callback(@[[NSNull null], outPutPath]);
     } else {
-        callback(@[[NSNull null]]);
+        callback(@[@101, @"Failed"]);
     }
 }
 //RCT_EXPORT_METHOD(addTag:(NSString *)tag response:(RCTResponseSenderBlock)completion)
