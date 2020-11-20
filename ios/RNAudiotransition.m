@@ -21,7 +21,7 @@ RCT_REMAP_METHOD(audioConvert,
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
     NSString *originType = [absolutePath pathExtension];
-    NSString *outPutPath = [absolutePath stringByReplacingOccurrencesOfString:originType withString: type];
+    NSString *outPutPath = [absolutePath stringByReplacingOccurrencesOfString:originType withString:type];
     BOOL isSucceed = YES;
     if ([originType isEqualToString:@"wav"] && [type isEqualToString:@"amr"]) {
         isSucceed = [[PFAudio shareInstance] wav2Amr:absolutePath isDeleteSourchFile:YES];
@@ -33,8 +33,6 @@ RCT_REMAP_METHOD(audioConvert,
         isSucceed = [[PFAudio shareInstance] pcm2Wav:absolutePath isDeleteSourchFile:YES];
     } else if ([originType isEqualToString:@"pcm"] && [type isEqualToString:@"amr"]) {
         isSucceed = [[PFAudio shareInstance] pcm2Amr:absolutePath isDeleteSourchFile:YES];
-    } else if ([originType isEqualToString:@"aac"] && [type isEqualToString:@"wav"]) {
-        isSucceed = [[PFAudio shareInstance] pcm2Wav:absolutePath isDeleteSourchFile:YES];
     }
 
     if (isSucceed) {
@@ -47,7 +45,7 @@ RCT_REMAP_METHOD(audioConvert,
 
 RCT_EXPORT_METHOD(audioToStart:(NSString *) absolutePath andType:(NSString *) type andResponse:(RCTResponseSenderBlock)callback) {
     NSString *originType = [absolutePath pathExtension];
-    NSString *outPutPath = [absolutePath stringByReplacingOccurrencesOfString:originType withString: type];
+    NSString *outPutPath = [absolutePath stringByReplacingOccurrencesOfString:originType withString:type];
     // NSString *outPutPath = @"";
     BOOL isSucceed = YES;
     if ([originType isEqualToString:@"wav"] && [type isEqualToString:@"amr"]) {
@@ -60,9 +58,7 @@ RCT_EXPORT_METHOD(audioToStart:(NSString *) absolutePath andType:(NSString *) ty
         isSucceed = [[PFAudio shareInstance] pcm2Wav:absolutePath isDeleteSourchFile:YES];
     } else if ([originType isEqualToString:@"pcm"] && [type isEqualToString:@"amr"]) {
         isSucceed = [[PFAudio shareInstance] pcm2Amr:absolutePath isDeleteSourchFile:YES];
-    } else if ([originType isEqualToString:@"aac"] && [type isEqualToString:@"wav"]) {
-        isSucceed = [[PFAudio shareInstance] pcm2Wav:absolutePath isDeleteSourchFile:YES];
-    }
+    } 
 //
     if (isSucceed) {
         callback(@[outPutPath]);
